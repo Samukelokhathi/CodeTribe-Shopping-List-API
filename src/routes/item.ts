@@ -1,6 +1,5 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { getItems, getItemById, addItem } from "../controllers/items";
-import { json } from "stream/consumers";
 
 export const itemRouterHandler = async (
   req: IncomingMessage,
@@ -24,6 +23,20 @@ export const itemRouterHandler = async (
       const item = getItemById(id);
       res.writeHead(item ? 200 : 400, { "content-type": "application/json" });
       res.end(JSON.stringify(item || { message: "Not found" }));
+    }
+
+    if (req.method === "POST") {
+      let body = "";
+      req.on("data", (chunk) => {
+        body += chunk.toString();
+      });
+
+      req.on("end", () => {
+        const { name, price, quantity, isPurchased } = JSON.parse(body);
+        const newItem = addItem(name, price, quantity, isPurchased);
+        res.writeHead(201, { "content-type": "application/json" });
+      });
+      return;
     }
   }
 };
