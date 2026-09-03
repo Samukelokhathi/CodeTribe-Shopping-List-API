@@ -35,6 +35,7 @@ export const itemRouterHandler = async (
         const { name, price, quantity, isPurchased } = JSON.parse(body);
         const newItem = addItem(name, price, quantity, isPurchased);
         res.writeHead(201, { "content-type": "application/json" });
+        res.end(JSON.stringify(newItem));
       });
       return;
     }

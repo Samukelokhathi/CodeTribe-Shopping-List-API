@@ -1,11 +1,16 @@
 import http, { IncomingMessage, ServerResponse } from "http";
+import { itemRouterHandler } from "./routes/item";
 
 const PORT = 3000;
 const statusCode = 200;
 
 const requestHandler = (req: IncomingMessage, res: ServerResponse) => {
-  res.writeHead(statusCode, { "content-type": "application/json" });
-  res.end(JSON.stringify({ message: "Testing server" }));
+  if (req.url?.startsWith("/items")) {
+    itemRouterHandler(req, res);
+  } else {
+    res.writeHead(statusCode, { "content-type": "application/json" });
+    res.end(JSON.stringify({ message: "Testing server" }));
+  }
 };
 
 const server = http.createServer(requestHandler);
