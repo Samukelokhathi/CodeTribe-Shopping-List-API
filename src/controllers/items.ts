@@ -1,7 +1,7 @@
 import { Item } from "../types/items";
 
 let items: Item[] = [];
-let currentId = 0;
+let currentId = 1;
 
 export const getItems = (): Item[] => {
   return items;
