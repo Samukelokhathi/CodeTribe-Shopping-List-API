@@ -21,3 +21,18 @@ export const addItem = (
   items.push(newItem);
   return newItem;
 };
+
+export const updateItem = (
+  id: number,
+  updates: Partial<Omit<Item, "id">>,
+): Item | undefined => {
+  const item = getItemById(id);
+  if (!item) return undefined;
+
+  if (updates.name !== undefined) item.name = updates.name;
+  if (updates.isPurchased !== undefined) item.isPurchased = updates.isPurchased;
+  if (updates.quantity !== undefined) item.quantity = updates.quantity;
+  if (updates.price !== undefined) item.price = updates.price;
+
+  return item;
+};
