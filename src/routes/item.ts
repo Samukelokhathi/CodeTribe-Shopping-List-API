@@ -64,9 +64,18 @@ export const itemRouterHandler = async (
             res.writeHead(400, { "content-type": "application/json" });
             res.end(JSON.stringify({ error: "Item isPurchased is required" }));
           }
-        } catch (error) {}
+
+          const newItem = addItem(name, price, quantity, isPurchased);
+          res.writeHead(201, { "content-type": "application/json" });
+          res.end(JSON.stringify(newItem));
+        } catch (error) {
+          res.writeHead(400, { "content-type": "application/json" });
+          res.end(JSON.stringify({ error: "Invalid JSON payload" }));
+        }
       });
       return;
     }
+    res.writeHead(405, { "content-type": "application/json" });
+    res.end(JSON.stringify({ error: "Method not allowed on /Items" }));
   }
 };
