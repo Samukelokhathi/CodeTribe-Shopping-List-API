@@ -1,5 +1,10 @@
 import { IncomingMessage, ServerResponse } from "http";
-import { getItems, getItemById, addItem } from "../controllers/items";
+import {
+  getItems,
+  getItemById,
+  addItem,
+  updateItem,
+} from "../controllers/items";
 import { error } from "console";
 
 export const itemRouterHandler = async (
@@ -77,5 +82,27 @@ export const itemRouterHandler = async (
     }
     res.writeHead(405, { "content-type": "application/json" });
     res.end(JSON.stringify({ error: "Method not allowed on /Items" }));
+
+    if (req.method === "PUT" && id) {
+      let body = "";
+      req.on("data", (chunk) => {
+        body += chunk.toString();
+      });
+
+      req.on("end", () => {
+        const updates = JSON.parse(body);
+        const updatedItem = updateItem(id, updates);
+
+        if (!updateItem) {
+          res.writeHead(404, { "content-type": "application/json" });
+          res.end(JSON.stringify({ message: "Not found" }));
+          return;
+        }
+
+        res.writeHead(200, { "content-type": "application/json" });
+        res.end(JSON.stringify(updatedItem));
+      });
+      return;
+    }
   }
 };
