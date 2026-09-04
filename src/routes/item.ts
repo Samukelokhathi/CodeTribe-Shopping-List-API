@@ -20,6 +20,12 @@ export const itemRouterHandler = async (
         res.end(JSON.stringify({ error: "Invalid item ID" }));
         return;
       }
+      const item = getItemById(id);
+      if (!item) {
+        res.writeHead(404, { "content-type": "application/json" });
+        res.end(JSON.stringify({ error: "Song not found" }));
+        return;
+      }
 
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(getItems()));
