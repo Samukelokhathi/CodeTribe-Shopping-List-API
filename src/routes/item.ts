@@ -1,5 +1,6 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { getItems, getItemById, addItem } from "../controllers/items";
+import { error } from "console";
 
 export const itemRouterHandler = async (
   req: IncomingMessage,
@@ -13,7 +14,13 @@ export const itemRouterHandler = async (
 
     const id = parts[2] ? parseInt(parts[2]) : undefined;
 
-    if (req.method === "GET" && !id) {
+    if (req.method === "GET" && id) {
+      if (isNaN(id)) {
+        res.writeHead(400, { "content-type": "application/json" });
+        res.end(JSON.stringify({ error: "Invalid item ID" }));
+        return;
+      }
+
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(getItems()));
       return;
