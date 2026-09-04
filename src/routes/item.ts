@@ -28,7 +28,7 @@ export const itemRouterHandler = async (
       }
 
       res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify(getItems()));
+      res.end(JSON.stringify(item));
       return;
     }
 
@@ -46,9 +46,25 @@ export const itemRouterHandler = async (
 
       req.on("end", () => {
         const { name, price, quantity, isPurchased } = JSON.parse(body);
-        const newItem = addItem(name, price, quantity, isPurchased);
-        res.writeHead(201, { "content-type": "application/json" });
-        res.end(JSON.stringify(newItem));
+
+        try {
+          if (!name || typeof name !== "string") {
+            res.writeHead(400, { "content-type": "application/json" });
+            res.end(JSON.stringify({ error: "Item name is required" }));
+          }
+          if (!price || typeof price !== "number") {
+            res.writeHead(400, { "content-type": "application/json" });
+            res.end(JSON.stringify({ error: "Item price is required" }));
+          }
+          if (!quantity || typeof quantity !== "number") {
+            res.writeHead(400, { "content-type": "application/json" });
+            res.end(JSON.stringify({ error: "Item quantity is required" }));
+          }
+          if (!isPurchased || typeof isPurchased !== "boolean") {
+            res.writeHead(400, { "content-type": "application/json" });
+            res.end(JSON.stringify({ error: "Item isPurchased is required" }));
+          }
+        } catch (error) {}
       });
       return;
     }
