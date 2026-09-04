@@ -80,8 +80,6 @@ export const itemRouterHandler = async (
       });
       return;
     }
-    res.writeHead(405, { "content-type": "application/json" });
-    res.end(JSON.stringify({ error: "Method not allowed on /Items" }));
 
     if (req.method === "PUT" && id) {
       let body = "";
@@ -104,5 +102,7 @@ export const itemRouterHandler = async (
       });
       return;
     }
+    res.writeHead(405, { "content-type": "application/json" });
+    res.end(JSON.stringify({ error: "Method not allowed on /Items" }));
   }
 };

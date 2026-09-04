@@ -36,3 +36,12 @@ export const updateItem = (
 
   return item;
 };
+
+export const deleteItem = (id: number): Item | undefined => {
+  const item = items.find((item) => item.id === id);
+  if (!item) {
+    return undefined;
+  }
+  items = items.filter((item) => item.id !== id);
+  return item;
+};
